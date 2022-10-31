@@ -1,73 +1,54 @@
 package algorithms.test;
 
-public class MergeSort {
-
-    public static void main(String[] params) {
-        int[] array = new int[]{4,3,5,6,3,4,23,412,123,532,3,1,23,5,324,13,3,1,34,2,43,24214};
-
-        array = mergeSort(array);
-        System.out.println(arrayToString(array));
-    }
-
-    public static int[] mergeSort(int[] array) {
-        int[] tmp;
-        int[] currentSrc = array;
-        int[] currentDest = new int[array.length];
+public class MergeSort extends Sort{
+    @Override
+    public void sort(int[] arr) {
+        int[] currentArray = arr;
+        int[] destArray = new int[arr.length];
+        int[] temp;
 
         int size = 1;
-        while (size < array.length) {
-            for (int i = 0; i < array.length; i += 2 * size) {
-                merge(currentSrc, i, currentSrc, i + size, currentDest, i, size);
-            }
 
-            tmp = currentSrc;
-            currentSrc = currentDest;
-            currentDest = tmp;
+        while (size < arr.length){
+
+            for (int i = 0; i < arr.length;i = i + size * 2){
+                merge(currentArray,i,currentArray,i + size,destArray,i,size);
+            }
+            temp = destArray;
+            destArray = currentArray;
+            currentArray = temp;
 
             size = size * 2;
-
         }
-        return currentSrc;
+
     }
 
-    private static void merge(int[] src1, int src1Start, int[] src2, int src2Start, int[] dest,
-                              int destStart, int size) {
-        int index1 = src1Start;
-        int index2 = src2Start;
+    private void merge(int[] currentArray1, int currentArray1Start, int[] currentArray2,
+                       int currentArray2Start, int[] destArray, int destArrayStart, int size) {
 
-        int src1End = Math.min(src1Start + size, src1.length);
-        int src2End = Math.min(src2Start + size, src2.length);
+        int index1 = currentArray1Start;
+        int index2 = currentArray2Start;
 
-        if (src1Start + size > src1.length) {
-            for (int i = src1Start; i < src1End; i++) {
-                dest[i] = src1[i];
-            }
-            return;
-        }
+        int currentArrays1End = Math.min(currentArray1Start + size,currentArray1.length);
+        int currentArrays2End = Math.min(currentArray2Start + size,currentArray2.length);
 
-        int iterationCount = src1End - src1Start + src2End - src2Start;
+        int iterableCount = currentArrays1End - currentArray1Start + currentArrays2End - currentArray2Start;
 
-        for (int i = destStart; i < destStart + iterationCount; i++) {
-            if (index1 < src1End && (index2 >= src2End || src1[index1] < src2[index2])) {
-                dest[i] = src1[index1];
+        for (int i = destArrayStart; i < destArrayStart + iterableCount;i++){
+            if (index1 < currentArrays1End &&
+                    (!(index2 < currentArrays2End) || currentArray1[index1] < currentArray2[index2])){
+                destArray[i] = currentArray1[index1];
                 index1++;
-            } else {
-                dest[i] = src2[index2];
-                index2++;
             }
+            else{
+                destArray[i] = currentArray2[index2];
+                index2++;
+
+            }
+
+
         }
     }
 
-    private static String arrayToString(int[] array) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                sb.append(", ");
-            }
-            sb.append(array[i]);
-        }
-        sb.append("]");
-        return sb.toString();
-    }
+
 }

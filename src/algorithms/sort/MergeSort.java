@@ -1,74 +1,70 @@
 package algorithms.sort;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class MergeSort {
     public static void main(String[] args) {
-        int[] arr = new int[]{4,3,5,6,3,4,23,412,123,532,3,1,23,5,324,13,3,1,34,2,43,24214};
-        sort(arr);
-        System.out.println(Arrays.toString(arr));
+        int[] array = new int[21];
+        for (int i = 0;i < array.length;i++){
+            array[i] = new Random().nextInt(12);
+
+
+        }
+        sort(array);
+        System.out.println(Arrays.toString(array));
     }
 
 
 
-
-    private static int[] sort(int[] arr){
+    private static int[] sort(int[] array){
+        int[] currentArr = array;
+        int[] destArray = new int[array.length];
         int[] temp;
-        int[] currentSrc = arr;
-        int[] currentDest = new int[arr.length];
-
 
         int size = 1;
 
-        while (size < arr.length){
-            for (int i = 0; i < arr.length; i += 2 * size){
-                merge(currentSrc,i,currentSrc,i + size,currentDest,i,size);
+        while (size < array.length){
+
+            for (int i = 0;i < array.length;i = i + size * 2){
+                merge(currentArr,i,currentArr,i + size,destArray,i,size);
             }
-            temp = currentSrc;
-            currentSrc = currentDest;
-            currentDest = temp;
+            temp = destArray;
+            destArray = currentArr;
+            currentArr = temp;
 
             size = size * 2;
 
-
         }
-        return currentSrc;
+
+        return currentArr;
 
     }
 
 
+    private static void merge(int[] currentArr1, int currentArr1Start, int[] currentArr2, int currentArray2Start,
+                              int[] destArray, int destArrayStart,int size){
+        int index1 = currentArr1Start;
+        int index2 = currentArray2Start;
+
+        int currentArr1End = Math.min(currentArr1Start + size,currentArr1.length);
+        int currentArr2End = Math.min(currentArray2Start + size, currentArr2.length);
 
 
+        int iterationCount = currentArr1End - currentArr1Start + currentArr2End - currentArray2Start;
 
-
-    public static void merge(int[] src1, int src1Start,int[] src2,int src2Start,int[] dest,
-                             int destStart,int size) {
-        int index1 = src1Start;
-        int index2 = src2Start;
-
-
-        int src1End = Math.min(src1Start + size, src1.length);
-        int src2End = Math.min(src2Start + size, src2.length);
-
-        if (src1Start + size > src1.length) {
-            for (int i = src1Start; i < src1End; i++) {
-                dest[i] = src1[i];
-            }
-            return;
-        }
-
-        int iterationCount = src1End - src1Start + src2End - src2Start;
-
-        for (int i = destStart; i < destStart + iterationCount; i++) {
-            if (index1 < src1End && (index2 >= src2End || src1[index1] < src2[index2])) {
-                dest[i] = src1[index1];
+        for (int i = destArrayStart; i < destArrayStart + iterationCount;i++){
+            if (index1 < currentArr1End && (!(index2 < currentArr2End) || currentArr1[index1] < currentArr2[index2])){
+                destArray[i] = currentArr1[index1];
                 index1++;
-            } else {
-                dest[i] = src2[index2];
+
+            }
+            else {
+                destArray[i] = currentArr2[index2];
                 index2++;
             }
-
         }
+
     }
 
 
